@@ -1,0 +1,66 @@
+ORG 100H
+
+; ----- INPUT -----
+MOV AH,1
+INT 21H
+
+SUB AL,48      ; ASCII to number
+
+; ----- NEW LINE AFTER INPUT -----
+MOV DL,13      ; Carriage Return
+MOV AH,2
+INT 21H
+
+MOV DL,10      ; Line Feed
+MOV AH,2
+INT 21H
+
+; ----- CHECK GRADE -----
+CMP AL,9
+JGE GRADE_AP
+
+CMP AL,7
+JGE GRADE_A
+
+CMP AL,5
+JGE GRADE_B
+
+JMP GRADE_F
+
+; ----- GRADE A+ -----
+GRADE_AP:
+MOV DX,OFFSET MSG1
+MOV AH,9
+INT 21H
+JMP EXIT
+
+; ----- GRADE A -----
+GRADE_A:
+MOV DX,OFFSET MSG2
+MOV AH,9
+INT 21H
+JMP EXIT
+
+; ----- GRADE B -----
+GRADE_B:
+MOV DX,OFFSET MSG3
+MOV AH,9
+INT 21H
+JMP EXIT
+
+; ----- FAIL -----
+GRADE_F:
+MOV DX,OFFSET MSG4
+MOV AH,9
+INT 21H
+
+; ----- EXIT -----
+EXIT:
+MOV AH,4CH
+INT 21H
+
+; ----- MESSAGES -----
+MSG1 DB 'Grade: A+',13,10,'GPA: 4.00$'
+MSG2 DB 'Grade: A',13,10,'GPA: 3.50$'
+MSG3 DB 'Grade: B',13,10,'GPA: 3.00$'
+MSG4 DB 'Grade: Fail',13,10,'GPA: 0$'

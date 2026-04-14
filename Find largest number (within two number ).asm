@@ -1,0 +1,62 @@
+ORG 100H
+
+; -------- INPUT FIRST NUMBER --------
+MOV AH,1
+INT 21H
+SUB AL,48
+MOV BL,AL
+
+; NEW LINE
+MOV AH,2
+MOV DL,0DH
+INT 21H
+MOV DL,0AH
+INT 21H
+
+; -------- INPUT SECOND NUMBER --------
+MOV AH,1
+INT 21H
+SUB AL,48
+MOV BH,AL
+
+; NEW LINE
+MOV AH,2
+MOV DL,0DH
+INT 21H
+MOV DL,0AH
+INT 21H
+
+; -------- PRINT MESSAGE --------
+MOV DX,OFFSET MSG
+MOV AH,9
+INT 21H
+
+; -------- COMPARE --------
+CMP BL,BH
+JG FIRST
+
+CMP BL,BH
+JE EQUAL
+
+MOV DL,BH
+JMP PRINT
+
+FIRST:
+MOV DL,BL
+JMP PRINT
+
+EQUAL:
+MOV DL,BL
+
+; -------- PRINT RESULT --------
+PRINT:
+ADD DL,48
+MOV AH,2
+INT 21H
+
+; -------- EXIT --------
+MOV AH,4CH
+INT 21H
+
+; -------- MESSAGE --------
+MSG DB 'Largest number or equal: $'
